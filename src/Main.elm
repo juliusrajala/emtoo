@@ -1,8 +1,8 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1, h2, img, button)
+import Html exposing (Html, text, div, h1, h2, img, input, button)
 import Html.Attributes exposing (src, class)
-import Html.Events exposing(onClick)
+import Html.Events exposing(onClick, onInput)
 -- import Navigation
 
 
@@ -11,11 +11,11 @@ type alias Model =
   { clickSum: Int
   , clickCount: Int
   , visibleView: View
-  , currentItem: Receipt
+  , currentReceipt: Receipt
   }
 
 type alias Receipt =
-  { receiptId : String
+  { receiptName : String
   , totalCost : Float
   , href : String
   , description : String
@@ -27,12 +27,12 @@ model =
   { clickSum = 0
   , clickCount = 0
   , visibleView = FirstForm
-  , currentItem = receiptItem
+  , currentReceipt = receiptItem
   }
 
 receiptItem : Receipt
 receiptItem =
-  { receiptId = ""
+  { receiptName = ""
   , totalCost = 0.0
   , href = ""
   , description = ""
@@ -52,14 +52,42 @@ type View
   | FormSubmit
 
 
+
 type Msg
-  = SetView (View)
+  = SetView View
+  | Description String
+  | Name String
+
+setDescription : String -> Model -> Model
+setDescription value model =
+  let
+      oldReceipt = model.currentReceipt
+      newReceipt = { oldReceipt | description = value }
+  in
+      { model | currentReceipt = newReceipt }
+
+setName : String -> Model -> Model
+setName value model =
+  let
+      oldReceipt = model.currentReceipt
+      newReceipt = { oldReceipt | receiptName = value }
+  in
+      { model | currentReceipt = newReceipt }
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
     SetView (viewType) ->
       ( { model | visibleView = viewType }
+      , Cmd.none
+      )
+    Description description ->
+      ( model |> setDescription description 
+      , Cmd.none
+      )
+    Name name ->
+      ( model |> setName name
       , Cmd.none
       )
 
