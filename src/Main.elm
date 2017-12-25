@@ -34,28 +34,11 @@ type View
 
 
 type Msg
-  = Increment
-  | Decrement
-  | SetView (View)
+  = SetView (View)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
-    Increment ->
-      (
-        { model
-        | clickSum = model.clickSum + 1
-        , clickCount = model.clickCount + 1
-        }
-        , Cmd.none
-      )
-    Decrement ->
-      ( { model
-        | clickSum = model.clickSum - 1
-        , clickCount = model.clickCount + 1
-        }
-      , Cmd.none
-      )
     SetView (viewType) ->
       ( { model | visibleView = viewType }
       , Cmd.none
@@ -78,15 +61,15 @@ viewSelector model =
 
 ---- VIEW ----
 
-view : Model -> Html Msg
-view model =
-  div []
-    [ img [ src "/logo.svg" ] []
-    , h1 [] [ text "Click to increment" ]
-    , h2 [] [ text ("Sum is " ++ (toString model.clickSum)) ]
-    , h2 [] [ text ("With " ++ (toString model.clickCount) ++ " clicks") ]
+layout : Model -> Html Msg
+layout model =
+  div [ class "EmtooLayout" ]
+    [ appHeader
+    , viewSelector model
     ]
 
+
+-- Pages
 firstForm : Model -> Html Msg
 firstForm model =
   div []
@@ -110,23 +93,26 @@ formSubmit model =
     , myButton "New" (SetView FirstForm)
     ]
 
--- myButton : String -> Html Msg
+
+-- Components
+
+appHeader : Html Msg
+appHeader =
+  div [ class "AppHeader" ]
+    [ img 
+      [ src "https://placehold.it/60x60"
+      , class "AppHeader-logo"
+      ] []
+    , h1 [ class "AppHeader-title" ] [ text "Em2" ]
+    ]
+
+myButton : String -> msg -> Html msg
 myButton label action =
   button
     [ class "EmtooButton"
     , onClick action
     ]
     [ text label ]
-
-layout : Model -> Html Msg
-layout model =
-  div [ class "EmtooLayout" ]
-    [ div [ class "EmtooHeader" ] []
-    , view model
-    , myButton "Plus" Increment
-    , myButton "Minus" Decrement
-    , viewSelector model
-    ]
 
 
 ---- PROGRAM ----
