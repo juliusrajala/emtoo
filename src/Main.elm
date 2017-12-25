@@ -13,6 +13,7 @@ type alias Model =
   , visibleView: View
   }
 
+model : { clickCount : Int, clickSum : Int, visibleView : View }
 model =
   { clickSum = 0
   , clickCount = 0
@@ -31,10 +32,11 @@ type View
   | SecondForm
   | FormSubmit
 
+
 type Msg
   = Increment
   | Decrement
-  | SetView
+  | SetView (View)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -54,11 +56,12 @@ update msg model =
         }
       , Cmd.none
       )
-    SetView viewType ->
+    SetView (viewType) ->
       ( { model | visibleView = viewType }
       , Cmd.none
       )
 
+viewSelector : { clickCount : Int, clickSum : Int, visibleView : View } -> Html Msg
 viewSelector model =
   let
     viewType = model.visibleView
@@ -67,10 +70,11 @@ viewSelector model =
       FirstForm ->
         firstForm model
       SecondForm ->
-        firstForm model
+        secondForm model
       FormSubmit ->
+        formSubmit model
+      Receipts ->
         firstForm model
-      
 
 ---- VIEW ----
 
@@ -83,15 +87,31 @@ view model =
     , h2 [] [ text ("With " ++ (toString model.clickCount) ++ " clicks") ]
     ]
 
-firstForm : Model -> Html msg
+firstForm : Model -> Html Msg
 firstForm model =
   div []
     [ h1 [] [ text "First Form" ]
     , myButton "Next" (SetView SecondForm)
     ]
 
--- mybutton : String -> Html Msg
-mybutton label action =
+secondForm : Model -> Html Msg
+secondForm model =
+  div []
+    [ h1 [] [ text "Second Form" ]
+    , myButton "Previous" (SetView FirstForm)
+    , myButton "Next" (SetView FormSubmit)
+    ]
+
+formSubmit : Model -> Html Msg
+formSubmit model =
+  div []
+    [ h1 [] [ text "Submit Form" ]
+    , myButton "Previous" (SetView SecondForm)
+    , myButton "New" (SetView FirstForm)
+    ]
+
+-- myButton : String -> Html Msg
+myButton label action =
   button
     [ class "EmtooButton"
     , onClick action
@@ -103,8 +123,9 @@ layout model =
   div [ class "EmtooLayout" ]
     [ div [ class "EmtooHeader" ] []
     , view model
-    , mybutton "Plus" Increment
-    , mybutton "Minus" Decrement
+    , myButton "Plus" Increment
+    , myButton "Minus" Decrement
+    , viewSelector model
     ]
 
 
