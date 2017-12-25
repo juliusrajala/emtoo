@@ -93,9 +93,7 @@ formSubmit model =
     , myButton "New" (SetView FirstForm)
     ]
 
-
 -- Components
-
 appHeader : Html Msg
 appHeader =
   div [ class "AppHeader" ]
