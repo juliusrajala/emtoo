@@ -14,6 +14,14 @@ img {
   max-width: 200px;
 }
 
+textarea {
+  min-height: 100px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 .AppHeader {
   display: block;
   text-align: left;
@@ -28,4 +36,42 @@ img {
   margin: 0;
   padding: 10px;
   vertical-align: middle;
+}
+
+.EmtooLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.EmtooForm {
+  padding: 20px;
+  text-align: center;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.EmtooField {
+  padding: 10px;
+  border: 2px dashed #f44336;
+  font-size: 15px;
+  border-radius: 4px;
+}
+
+.EmtooButton {
+  border: 2px solid #f44336;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #f44336;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.EmtooForm > * {
+  display: block;
+  margin: 10px;
 }

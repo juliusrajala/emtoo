@@ -1,7 +1,7 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1, h2, img, input, button)
-import Html.Attributes exposing (src, class)
+import Html exposing (Html, text, div, h1, h2, img, input, button, textarea, form)
+import Html.Attributes exposing (src, class, placeholder)
 import Html.Events exposing(onClick, onInput)
 -- import Navigation
 
@@ -119,25 +119,35 @@ layout model =
 -- Pages
 firstForm : Model -> Html Msg
 firstForm model =
-  div []
+  form [ class "EmtooForm" ]
     [ h1 [] [ text "First Form" ]
-    , myButton "Next" (SetView SecondForm)
+    , input 
+      [ class "EmtooField"
+      , placeholder "Name"
+      , onInput Name
+      ] []
+    , textarea 
+      [ class "EmtooField"
+      , placeholder "Description"
+      , onInput Description
+      ] []
+    , emtooButton "Next" (SetView SecondForm)
     ]
 
 secondForm : Model -> Html Msg
 secondForm model =
   div []
     [ h1 [] [ text "Second Form" ]
-    , myButton "Previous" (SetView FirstForm)
-    , myButton "Next" (SetView FormSubmit)
+    , emtooButton "Previous" (SetView FirstForm)
+    , emtooButton "Next" (SetView FormSubmit)
     ]
 
 formSubmit : Model -> Html Msg
 formSubmit model =
   div []
     [ h1 [] [ text "Submit Form" ]
-    , myButton "Previous" (SetView SecondForm)
-    , myButton "New" (SetView FirstForm)
+    , emtooButton "Previous" (SetView SecondForm)
+    , emtooButton "New" (SetView FirstForm)
     ]
 
 -- Components
@@ -148,11 +158,11 @@ appHeader =
       [ src "https://placehold.it/60x60"
       , class "AppHeader-logo"
       ] []
-    , h1 [ class "AppHeader-title" ] [ text "Em2" ]
+    , h1 [ class "AppHeader-title" ] [ text "EmToo" ]
     ]
 
-myButton : String -> msg -> Html msg
-myButton label action =
+emtooButton : String -> msg -> Html msg
+emtooButton label action =
   button
     [ class "EmtooButton"
     , onClick action
