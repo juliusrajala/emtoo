@@ -11,13 +11,32 @@ type alias Model =
   { clickSum: Int
   , clickCount: Int
   , visibleView: View
+  , currentItem: Receipt
   }
 
-model : { clickCount : Int, clickSum : Int, visibleView : View }
+type alias Receipt =
+  { receiptId : String
+  , totalCost : Float
+  , href : String
+  , description : String
+  , people : List String
+  }
+
+model : Model
 model =
   { clickSum = 0
   , clickCount = 0
   , visibleView = FirstForm
+  , currentItem = receiptItem
+  }
+
+receiptItem : Receipt
+receiptItem =
+  { receiptId = ""
+  , totalCost = 0.0
+  , href = ""
+  , description = ""
+  , people = []
   }
 
 init : Model -> ( Model, Cmd Msg )
@@ -44,7 +63,7 @@ update msg model =
       , Cmd.none
       )
 
-viewSelector : { clickCount : Int, clickSum : Int, visibleView : View } -> Html Msg
+viewSelector : Model -> Html Msg
 viewSelector model =
   let
     viewType = model.visibleView
